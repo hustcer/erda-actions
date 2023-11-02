@@ -1,11 +1,11 @@
 # Git: git version 2.30.2
 # gcc version 10.2.1 20210110 (Debian 10.2.1-6)
-# Node: 16.16.0 LTS, npm: 8.11.0, yarn: 1.22.19, herd: 1.1.19, pnpm: 7.8.0, fnm: 1.31.1
+# Node: 16.20.2 LTS, npm: 8.11.0, yarn: 1.22.19, herd: 1.1.27, pnpm: 7.8.0, fnm: 1.31.1
 # /etc/os-release: Debian: Debian GNU/Linux 11 (bullseye)
 # Kernel: Linux cd92393eb566 5.10.104-linuxkit Thu Mar 17 17:08:06 UTC 2022 x86_64 GNU/Linux
-# Build cmd: docker build . -t terminus/debian-node.16-herd.1.1.19
-# Other tags: terminus/debian-herd:1.1.19-n16.16,terminus/debian-herd:1.1.19
-FROM --platform=$TARGETPLATFORM node:16.16.0-bullseye-slim
+# Build cmd: docker build . -t terminus/debian-node.16-herd.1.1.27
+# Other tags: terminus/debian-herd:1.1.27-n16.20,terminus/debian-herd:1.1.27
+FROM --platform=$TARGETPLATFORM node:16.20.2-bullseye-slim
 
 LABEL maintainer=hustcer<majun@terminus.io>
 
@@ -66,8 +66,10 @@ RUN npm config set @terminus:registry https://registry.npm.terminus.io/ \
     && echo 'set enc=utf8' >> /etc/vim/vimrc \
     && echo 'set fencs=utf8,gbk,gb2312,gb18030' >> /etc/vim/vimrc \
     # Add --unsafe-perm to fix 'Error: EACCES: permission denied, mkdir...' issue while install node-sass
-    && npm i -g --unsafe-perm @terminus/herd@1.1.19 \
+    && npm i -g --unsafe-perm @terminus/herd@1.1.27 \
     && npm i -g pnpm@latest \
+    # Fix "Unable to find the global bin directory" error while running `pnpm i -g`
+    && pnpm config set global-bin-dir '/usr/local/bin' \
     && rm -rf /var/lib/apt/lists/* && apt autoremove -y \
     # Add dice and erda user and create home dir
     && useradd -m -s /bin/bash dice \
