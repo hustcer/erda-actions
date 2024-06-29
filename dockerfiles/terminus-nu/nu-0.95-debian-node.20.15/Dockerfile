@@ -1,10 +1,11 @@
-# Nu: 0.94.0, Node: v20.13.1 LTS, npm: 10.5.2, pnpm: 9.1.3, Git: 2.39.2, fnm 1.36.0
+# Nu: 0.95.0, Node: v20.15.0 LTS, npm: 10.7.0, pnpm: 9.3.0, Git: 2.39.2, fnm 1.37.1
 # GNU bash: 5.2.15, Wget 1.21.3, aria2: 1.36.0, curl: 7.88.1, ripgrep 13.0.0, sd 1.0.0
 # /etc/os-release: Debian GNU/Linux 12 (bookworm)
 # Kernel: Linux bdbfa1bb3a92 6.4.16-linuxkit #1 SMP PREEMPT_DYNAMIC Thu Nov 16 10:55:59 UTC 2023 x86_64 GNU/Linux
-# Build cmd: docker build . -t terminus/debian-nu-0.9f-node.20 --no-cache
-# Other tags: terminus/debian-nu:0.9f-n20.12,terminus/debian-nu:0.9f
-FROM node:20.13.1-bookworm-slim
+# Build cmd: docker build . -t terminus/debian-nu-0.95-node.20 --no-cache
+# docker buildx build --platform linux/amd64,linux/arm64 . -t hustcer/debian-nu:0.95-node.20.15.lts --no-cache
+# Other tags: terminus/debian-nu:0.95-n20.15,terminus/debian-nu:0.95
+FROM node:20.15.0-bookworm-slim
 
 LABEL maintainer=hustcer<majun@terminus.io>
 
