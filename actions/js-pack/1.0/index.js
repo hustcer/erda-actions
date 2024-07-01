@@ -11,6 +11,7 @@ const nodeVerMap = {
   14: 'v14.19.0',
   16: 'v16.20.2',
   18: 'v18.17.1',
+  20: 'v20.15.0',
 }
 const faqUrl = 'https://docs.erda.cloud/latest/manual/faq/faq.html';
 
