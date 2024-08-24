@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:latest
 
 # Nu: 0.97.1, Node: v20.17.0 LTS, npm: 10.8.2, pnpm: 9.8.0, Git: 2.39.2, fnm 1.37.1
 # GNU bash: 5.2.15, Wget 1.21.3, aria2: 1.36.0, curl: 7.88.1, ripgrep 13.0.0, sd 1.0.0
@@ -7,6 +8,10 @@
 # docker buildx build --platform linux/amd64,linux/arm64 . -t hustcer/debian-nu:0.97-node.20.17.lts --no-cache
 # Other tags: terminus/debian-nu:0.97-n20.17,terminus/debian-nu:0.97
 FROM node:20.17.0-bookworm-slim
+
+ARG TARGETARCH
+ARG ARCH=${TARGETARCH/arm64/aarch64}
+ARG ARCH=${ARCH/amd64/x86_64}
 
 LABEL maintainer=hustcer<majun@terminus.io>
 
@@ -41,7 +46,7 @@ RUN npm config set @terminus:registry https://registry.npm.terminus.io/ \
     && pnpm config set global-bin-dir '/usr/local/bin' \
     && apt update \
     && apt install -y --no-install-recommends --no-install-suggests wget aria2 curl git unzip ripgrep \
-    && cd /lib; curl -s https://api.github.com/repos/chmln/sd/releases/latest | grep browser_download_url | cut -d '"' -f 4 | grep x86_64-unknown-linux-musl | aria2c -i - \
+    && cd /lib; curl -s https://api.github.com/repos/chmln/sd/releases/latest | grep browser_download_url | cut -d '"' -f 4 | grep ${ARCH}-unknown-linux-musl | aria2c -i - \
     && mkdir sd-latest && tar xvf sd-*.tar.gz --directory=sd-latest \
     && cp -aR sd-latest/**/sd /usr/local/bin/; rm -rf sd-* \
     # Make /bin/sh symlink to bash instead of dash:
@@ -59,7 +64,7 @@ RUN npm config set @terminus:registry https://registry.npm.terminus.io/ \
     && curl -fsSL https://fnm.vercel.app/install | bash \
     # Fix: fnm can't infer your shell based on the process tree.
     && sed -i 's/fnm env/fnm env --shell=bash/' /root/.bashrc \
-    && cd /lib; curl -s https://api.github.com/repos/nushell/nushell/releases/latest | grep browser_download_url | cut -d '"' -f 4 | grep x86_64-unknown-linux-musl | aria2c -i - \
+    && cd /lib; curl -s https://api.github.com/repos/nushell/nushell/releases/latest | grep browser_download_url | cut -d '"' -f 4 | grep ${ARCH}-unknown-linux-gnu | aria2c -i - \
     && mkdir nu-latest && tar xvf nu-*.tar.gz --directory=nu-latest \
     && cp -aR nu-latest/**/* /usr/local/bin/ \
     # Setup default config file for nushell
